@@ -1,0 +1,11 @@
+node_modules/
+*.log
+__pycache__/
+*.local.md
+
+# OS/editor
+.DS_Store
+Thumbs.db
+
+# Local secrets
+.env

@@ -1,0 +1,31 @@
+{
+  "name": "hiresnix-labs",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Hands-on Linux, Git, Docker, networking and CI/CD labs in a real terminal - run locally (no Docker on Linux/Windows) or hosted",
+  "license": "MIT",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test --test-force-exit test/unit/*.test.js test/integration/*.test.js",
+    "test:unit": "node --test test/unit/*.test.js",
+    "lab:validate": "node scripts/validate-labs.js --strict",
+    "lab:lint": "node scripts/lint-labs.js",
+    "lab:check": "node scripts/lab-check.js",
+    "lab:new": "node scripts/new-lab.js",
+    "check:hygiene": "node scripts/check-hygiene.js",
+    "start:local": "LAB_PROFILE=local node src/server.js"
+  },
+  "dependencies": {
+    "@xterm/addon-fit": "^0.11.0",
+    "@xterm/xterm": "^6.0.0",
+    "js-yaml": "^5.4.2",
+    "ws": "^8.18.0"
+  },
+  "optionalDependencies": {
+    "node-pty": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

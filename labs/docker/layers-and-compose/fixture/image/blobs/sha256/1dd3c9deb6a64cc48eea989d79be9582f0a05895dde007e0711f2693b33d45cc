@@ -1,0 +1,30 @@
+{
+  "architecture": "amd64",
+  "os": "linux",
+  "config": {
+    "Cmd": [
+      "node",
+      "/app/server.js"
+    ],
+    "WorkingDir": "/app"
+  },
+  "rootfs": {
+    "type": "layers",
+    "diff_ids": [
+      "sha256:12491583768713e2102ceaaf710529346dd233895d1ac40edf102730e740fab0",
+      "sha256:29b39b91b547de0c70a8c4771aed391d6317af877c7beeb9762185fa58032864",
+      "sha256:4186d2b80b4da70376e14871080b66dd354e7c67344d067a3c42d3a593bc3acc"
+    ]
+  },
+  "history": [
+    {
+      "created_by": "COPY server.js /app/server.js"
+    },
+    {
+      "created_by": "COPY .env /app/.env"
+    },
+    {
+      "created_by": "RUN rm /app/.env"
+    }
+  ]
+}

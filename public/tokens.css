@@ -1,0 +1,35 @@
+/* Hiresnix Labs design tokens + page ground. Direction: an amber-phosphor terminal on deep ink blue. Hairline rules, warm paper text,
+   one brand gradient (pale gold to amber to coral) used only on the headline accent, the primary button and thin progress rules. */
+:root {
+  --bg: #0b1220; --panel: #101a2c; --panel2: #15223a;
+  --text: #f1ede4; --muted: #9aa3b5; --faint: #64708a;
+  --rule: rgba(255, 214, 150, .09); --rule2: rgba(255, 214, 150, .2);
+  --brand: #f5a524; --brand2: #ff7a45; --brand3: #ffd166;
+  --grad: linear-gradient(100deg, #ffd166 0%, #f5a524 50%, #ff7a45 100%);
+  --warn: #fde68a; --ok: #4ade80; --bad: #f87171;
+  --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  --display: 'Sora', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --topbar-h: 64px;
+  --c: var(--brand);
+}
+* { box-sizing: border-box; }
+html { background: var(--bg); }
+html, body { margin: 0; min-height: 100%; color: var(--text); font: 15px/1.6 var(--sans); -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+/* the gradient wash: soft amber lights over the dark ground, fixed so it does not scroll with the page */
+body {
+  background:
+    radial-gradient(900px 520px at 88% -8%, rgba(245, 165, 36, .17), transparent 62%),
+    radial-gradient(760px 480px at -6% 34%, rgba(255, 122, 69, .08), transparent 60%),
+    radial-gradient(700px 400px at 70% 105%, rgba(255, 209, 102, .05), transparent 60%),
+    var(--bg);
+  background-attachment: fixed;
+}
+a { color: inherit; text-decoration-color: var(--rule2); text-underline-offset: 3px; }
+a:hover { text-decoration-color: currentColor; }
+::selection { background: rgba(245, 165, 36, .4); }
+code, pre, .mono { font-family: var(--mono); }
+code { background: rgba(255, 214, 150, .08); padding: 1px 6px; border-radius: 4px; font-size: .9em; }
+pre { background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; padding: 10px 12px; overflow: auto; }
+pre code { background: none; padding: 0; }
+h1, h2, h3, h4 { margin: 0; font-weight: 600; letter-spacing: -.025em; }

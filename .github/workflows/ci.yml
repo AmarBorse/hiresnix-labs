@@ -1,0 +1,69 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:   # lets a maintainer re-run CI by hand
+
+jobs:
+  test:
+    name: Tests (native Linux)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - run: npm ci
+      - run: npm run check:hygiene
+      - run: npm run lab:lint -- --strict
+      - run: npm test
+
+  native-labs:
+    name: Every lab works natively - no Docker (the ./start.sh / WSL path)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      # The same tools ./start.sh installs on a learner's Linux or WSL machine.
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq jq dnsutils iproute2 netcat-openbsd tree file
+      - run: npm ci
+      # Runs as the unprivileged runner user, exactly like a learner's native run.
+      - run: node scripts/validate-labs.js --strict
+      # The launcher itself: install check, start, health, a real terminal session, clean stop.
+      - run: pip install websockets
+      - run: |
+          NO_BROWSER=1 ./start.sh > start.log 2>&1 &
+          for i in $(seq 1 60); do curl -fs http://localhost:8080/healthz && break; sleep 1; done
+          python3 deploy/smoke-test.py localhost:8080
+          kill -TERM %1; wait || true
+      - if: failure()
+        run: cat start.log || true
+
+  image:
+    name: Image - validate every lab, full tests as root (per-session users)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: docker/setup-buildx-action@v4
+      - run: docker buildx build --platform linux/amd64 --load -t hiresnix-labs:ci .
+      # Every task of every lab must fail before its solution and pass after it, and follow the house style.
+      - run: docker run --rm hiresnix-labs:ci node scripts/validate-labs.js --strict
+      # Same tests as above, but as root with LAB_UID set, which turns on the isolation tests.
+      - run: docker run --rm -v "$PWD/test:/app/test:ro" hiresnix-labs:ci sh -c 'node --test --test-force-exit test/unit/*.test.js test/integration/*.test.js'
+
+  compose:
+    name: Docker run - docker compose + smoke test (hardened container profile)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - run: pip install websockets
+      - run: docker compose up -d --build --wait
+      - run: python3 deploy/smoke-test.py localhost:8080
+      - if: failure()
+        run: docker compose logs
+      - if: always()
+        run: docker compose down
