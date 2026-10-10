@@ -8,6 +8,9 @@ All notable changes to Hiresnix Labs are listed here. The format follows Keep a 
 - Windows: `start.bat` failed with `execvpe(bash) failed` when the default WSL distribution was Docker Desktop's internal
   one, which has no bash. It now looks for a distribution with bash (the default, then Ubuntu, then any other) and, if there
   is none, explains how to install Ubuntu. The Git Bash hand-over in `start.sh` does the same.
+- Windows: the `start.bat` window closed at once (hiding any error) when the folder path contained parentheses, such as
+  `hiresnix-labs (1)`. Paths are no longer used inside `( )` blocks, and the window now always stays open.
+- CI: the launcher job runs `bash ./start.sh`, so it no longer depends on the file's executable bit.
 
 ## [0.1.0] - 2026-10-10
 

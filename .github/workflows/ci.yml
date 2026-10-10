@@ -36,7 +36,7 @@ jobs:
       # The launcher itself: install check, start, health, a real terminal session, clean stop.
       - run: pip install websockets
       - run: |
-          NO_BROWSER=1 ./start.sh > start.log 2>&1 &
+          NO_BROWSER=1 bash ./start.sh > start.log 2>&1 &
           for i in $(seq 1 60); do curl -fs http://localhost:8080/healthz && break; sleep 1; done
           python3 deploy/smoke-test.py localhost:8080
           kill -TERM %1; wait || true
