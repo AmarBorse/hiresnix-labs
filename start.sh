@@ -44,10 +44,18 @@ case "$OS" in
     MODE=docker ;;
   MINGW*|MSYS*|CYGWIN*)
     # Git Bash on Windows: the labs need Linux. Prefer WSL (no Docker), fall back to Docker Desktop.
-    if [ "$MODE" = native ] && command -v wsl.exe >/dev/null 2>&1 && wsl.exe -e true >/dev/null 2>&1; then
-      say "Handing over to WSL..."
-      export WSLENV="${WSLENV:+$WSLENV:}LABS_PORT:NO_BROWSER"
-      exec wsl.exe --cd "$(pwd -W)" -e bash ./start.sh
+    # The distro must have bash: Docker Desktop's internal "docker-desktop" distro (sometimes the default) has none.
+    if [ "$MODE" = native ] && command -v wsl.exe >/dev/null 2>&1; then
+      WSL_D=()
+      if wsl.exe -e bash -c 'exit 0' >/dev/null 2>&1; then WSL_OK=1
+      elif wsl.exe -d Ubuntu -e bash -c 'exit 0' >/dev/null 2>&1; then WSL_OK=1; WSL_D=(-d Ubuntu)
+      else WSL_OK=""; note "WSL has no Linux distribution with bash (Docker Desktop's internal one does not count). To use WSL: wsl --install -d Ubuntu"
+      fi
+      if [ -n "$WSL_OK" ]; then
+        say "Handing over to WSL..."
+        export WSLENV="${WSLENV:+$WSLENV:}LABS_PORT:NO_BROWSER"
+        exec wsl.exe "${WSL_D[@]}" --cd "$(pwd -W)" -e bash ./start.sh
+      fi
     fi
     MODE=docker ;;
   *) fail "Unsupported system: $OS" ;;

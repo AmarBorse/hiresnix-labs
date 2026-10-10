@@ -9,10 +9,45 @@ cd /d "%~dp0"
 if /i "%~1"=="docker" goto docker
 
 where wsl.exe >nul 2>nul || goto nowsl
-wsl.exe -e true >nul 2>nul || goto nowsl
+
+rem Find a WSL distribution that has bash. Docker Desktop adds its own internal distro ("docker-desktop"), which can be
+rem the default and has no bash, so "WSL works" is not enough: try the default, then Ubuntu, then every other distro.
+set "WSL_UTF8=1"
+set "DISTRO="
+wsl.exe -e bash -c "exit 0" >nul 2>nul && goto runwsl
+wsl.exe -d Ubuntu -e bash -c "exit 0" >nul 2>nul && (set "DISTRO=Ubuntu" & goto runwsl)
+for /f "usebackq delims=" %%d in (`wsl.exe -l -q 2^>nul`) do (
+  if not defined DISTRO (
+    echo %%d| findstr /i /b "docker-desktop" >nul || (
+      wsl.exe -d "%%d" -e bash -c "exit 0" >nul 2>nul && set "DISTRO=%%d"
+    )
+  )
+)
+if not defined DISTRO goto nolinux
+
+:runwsl
 echo Starting Hiresnix Labs in WSL...
-wsl.exe --cd "%~dp0." -e bash ./start.sh
+if defined DISTRO (
+  wsl.exe -d "%DISTRO%" --cd "%~dp0." -e bash ./start.sh
+) else (
+  wsl.exe --cd "%~dp0." -e bash ./start.sh
+)
 if errorlevel 1 pause
+goto :eof
+
+:nolinux
+echo.
+echo  WSL is installed, but it has no Linux distribution to run the labs in.
+echo  (Docker Desktop's internal "docker-desktop" one cannot run them.)
+echo.
+echo  1. Open "Terminal" or "PowerShell" as Administrator
+echo  2. Run:   wsl --install -d Ubuntu
+echo  3. Finish the Ubuntu setup (pick a username and password)
+echo  4. Double-click start.bat again
+echo.
+where docker >nul 2>nul && echo  Or, to use Docker Desktop instead:  start.bat docker
+echo.
+pause
 goto :eof
 
 :nowsl

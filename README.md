@@ -52,6 +52,7 @@ your files like any terminal can. For anything where people other than you get a
 assessments — use the container with its per-session users (see *Hosting* below).
 
 **Troubleshooting**
+- *Windows: `execvpe(bash) failed`:* WSL has no real Linux distribution (Docker Desktop's internal one does not count). Run `wsl --install -d Ubuntu` in an Administrator terminal, create your user, and start again.
 - *Port in use:* `LABS_PORT=9090 ./start.sh`.
 - *The terminal module did not build:* the script needs `make`, `g++` and `python3`; it installs them with `apt`. Run it again after installing them yourself.
 - *Slow first start on Windows:* the folder is on the Windows drive (`/mnt/c/...`), which WSL reads slowly. Copy it into your Linux home: in WSL, `cp -r . ~/hiresnix-labs && cd ~/hiresnix-labs && ./start.sh`.
