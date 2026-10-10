@@ -18,27 +18,40 @@ if /i "%~1"=="docker" goto docker
 
 where wsl.exe >nul 2>nul || goto nowsl
 
-rem Find a WSL distribution that has bash. Docker Desktop adds its own internal distro ("docker-desktop"), which can be
-rem the default and has no bash, so "WSL works" is not enough: try the default, then Ubuntu, then every other distro.
-set "WSL_UTF8=1"
+rem Find a WSL distribution that has bash. Docker Desktop adds its own internal distro ("docker-desktop"), which is often
+rem the default and has no bash, so "WSL works" is not enough. Known Linux distros are tried by name first, then the default.
+rem Exit codes are compared with "equ 0" on purpose: WSL errors can be negative, which "&&" and "if errorlevel" misread.
+rem To force one:  set HIRESNIX_DISTRO=<name from "wsl -l -v">  then run start.bat
 set "DISTRO="
-wsl.exe -e bash -c "exit 0" >nul 2>nul && goto runwsl
-wsl.exe -d Ubuntu -e bash -c "exit 0" >nul 2>nul && (set "DISTRO=Ubuntu" & goto runwsl)
-for /f "usebackq delims=" %%d in (`wsl.exe -l -q 2^>nul`) do (
-  if not defined DISTRO (
-    echo %%d| findstr /i /b "docker-desktop" >nul || (
-      wsl.exe -d "%%d" -e bash -c "exit 0" >nul 2>nul && set "DISTRO=%%d"
-    )
-  )
-)
-if not defined DISTRO goto nolinux
+set "USE_DEFAULT="
+if defined HIRESNIX_DISTRO goto forced
+for %%n in (Ubuntu Ubuntu-24.04 Ubuntu-22.04 Ubuntu-20.04 Debian) do if not defined DISTRO call :trydistro %%n
+if defined DISTRO goto runwsl
+call :trydefault
+if defined USE_DEFAULT goto runwsl
+goto nolinux
+
+:forced
+set "DISTRO=%HIRESNIX_DISTRO%"
+goto runwsl
+
+:trydistro
+wsl.exe -d %1 -e bash -c "exit 0" >nul 2>nul
+if %errorlevel% equ 0 set "DISTRO=%~1"
+exit /b
+
+:trydefault
+wsl.exe -e bash -c "exit 0" >nul 2>nul
+if %errorlevel% equ 0 set "USE_DEFAULT=1"
+exit /b
 
 :runwsl
-echo Starting Hiresnix Labs in WSL...
 if defined DISTRO goto rundistro
+echo Starting Hiresnix Labs in WSL (default distribution)...
 wsl.exe --cd "%~dp0." -e bash ./start.sh
 goto stopped
 :rundistro
+echo Starting Hiresnix Labs in WSL (%DISTRO%)...
 wsl.exe -d "%DISTRO%" --cd "%~dp0." -e bash ./start.sh
 goto stopped
 
@@ -57,6 +70,10 @@ echo  2. Run:   wsl --install -d Ubuntu
 echo  3. Finish the Ubuntu setup (pick a username and password)
 echo  4. Double-click start.bat again
 echo.
+echo  Already have Ubuntu? Make it the default:  wsl --set-default Ubuntu
+echo  Your WSL distributions:
+wsl.exe -l -v
+echo.
 where docker >nul 2>nul && echo  Or, to use Docker Desktop instead:  start.bat docker
 echo.
 goto :eof
@@ -69,6 +86,10 @@ echo  1. Open "Terminal" or "PowerShell" as Administrator
 echo  2. Run:   wsl --install
 echo  3. Restart the computer, finish the Ubuntu setup (pick a username and password)
 echo  4. Double-click start.bat again
+echo.
+echo  Already have Ubuntu? Make it the default:  wsl --set-default Ubuntu
+echo  Your WSL distributions:
+wsl.exe -l -v
 echo.
 where docker >nul 2>nul && echo  Already have Docker Desktop? Run:  start.bat docker
 echo.

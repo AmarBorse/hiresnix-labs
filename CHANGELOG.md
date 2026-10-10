@@ -10,6 +10,9 @@ All notable changes to Hiresnix Labs are listed here. The format follows Keep a 
   is none, explains how to install Ubuntu. The Git Bash hand-over in `start.sh` does the same.
 - Windows: the `start.bat` window closed at once (hiding any error) when the folder path contained parentheses, such as
   `hiresnix-labs (1)`. Paths are no longer used inside `( )` blocks, and the window now always stays open.
+- Windows: with Docker Desktop's distro as the WSL default, `start.bat` could pick a wrong distro name and fail with
+  `WSL_E_DISTRO_NOT_FOUND`. It now tries known Linux distros by name (Ubuntu first) with exact exit-code checks, then the
+  default; `HIRESNIX_DISTRO` forces one, and the message for a missing distro lists what WSL has.
 - CI: the launcher job runs `bash ./start.sh`, so it no longer depends on the file's executable bit.
 
 ## [0.1.0] - 2026-10-10
