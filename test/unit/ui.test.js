@@ -17,7 +17,7 @@ test('every page built by ui.page has the branded header and the env chip', () =
 test('the frame defines the mark once, links a favicon, and escapes titles and chip text', () => {
   const html = createUi({ chip: '<x>' }).page('<script>', '');
   assert.equal((html.match(/<symbol id="mark"/g) || []).length, 1);
-  assert.match(html, /<link rel="icon" href="data:image\/svg\+xml,/);
+  assert.match(html, /<link rel="icon" type="image\/png" href="\/logo\/hiresnix-icon\.png"/);
   assert.ok(!html.includes('<script>') && !html.includes('<x>'));
   assert.match(mark('big'), /<svg class="mk big" aria-hidden="true" focusable="false"><use href="#mark"\/><\/svg>/);
 });
@@ -31,7 +31,7 @@ test('serveAsset serves the stylesheets, scripts and logo; optional font import;
   const sent = [];
   const res = { writeHead: (s, h) => sent.push([s, h['Content-Type']]), end: () => {} };
   const ui = createUi({ chip: 'local' });
-  const served = ['/app.css', '/lab.js', '/progress.js', '/home.css', '/home.js', '/logo/hiresnix-logo.svg'];
+  const served = ['/app.css', '/lab.js', '/progress.js', '/home.css', '/home.js', '/logo/hiresnix-mark.png', '/logo/hiresnix-wordmark.png', '/logo/hiresnix-icon.png'];
   for (const p of served) assert.equal(ui.serveAsset({ method: 'GET' }, res, p), true, p);
   assert.equal(ui.serveAsset({ method: 'GET' }, res, '/etc/passwd'), false);
   assert.equal(ui.serveAsset({ method: 'GET' }, res, '/../package.json'), false);

@@ -1,3 +1,8 @@
+<p align="center"><picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/hiresnix-logo-dark.png">
+  <img src="docs/hiresnix-logo.png" alt="Hiresnix" width="420">
+</picture></p>
+
 # Hiresnix Labs
 
 **Learn DevOps by doing: a real Linux terminal, real files, and every task graded on what actually happened.**
@@ -84,6 +89,9 @@ assessments — use the container with its per-session users (see *Hosting* belo
   default `hosted` profile adds invite codes, per-IP seat limits, tight timeouts and a same-origin guard.
 - **Request guards.** Only the lab page itself can open or drive a shell: a website you visit cannot reach your terminal,
   and in local mode the server refuses any non-localhost `Host` (DNS rebinding).
+- **Command guide.** Under every step, "Commands in this step" explains each command the step mentions in simple English:
+  what it does, how it works, and an example to try. The explanations live in `labs/glossary.yaml` (plus
+  `labs/<track>/glossary.yaml` for track words like Dockerfile instructions), so anyone can improve them.
 - **Progress** (which labs you finished) lives in your browser's localStorage. No accounts yet.
 
 ## Add a lab

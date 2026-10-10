@@ -1,0 +1,304 @@
+# Command guide shown under each lab step ("Commands in this step").
+# A step lists every command its text mentions in `backticks` that has an entry here.
+# Keep it simple English: `what` = one sentence on what it does, `how` = how it works and the common options,
+# `example` = one safe command to try. A track can add or override entries in labs/<track>/glossary.yaml.
+
+pwd:
+  what: 'Prints the folder you are in right now (your "working directory").'
+  how: 'The shell always stands inside one folder. pwd shows its full path from the root /, for example /home/learner.'
+  example: 'pwd'
+
+ls:
+  what: 'Lists the files and folders in a directory.'
+  how: 'With no name it lists the folder you are in. -l shows details (permissions, owner, size, date), -a also shows hidden files whose names start with a dot, and -h makes sizes readable.'
+  example: 'ls -la'
+
+cd:
+  what: 'Moves you into another folder.'
+  how: 'cd projects goes into a folder, cd .. goes up one level, cd / goes to the root, and cd on its own (or cd ~) goes back to your home folder.'
+  example: 'cd /etc && pwd'
+
+cat:
+  what: 'Prints the whole content of a file on the screen.'
+  how: 'It reads the file from top to bottom and writes it to the terminal. Give it more than one file and it prints them one after another (cat = concatenate).'
+  example: 'cat /etc/os-release'
+
+echo:
+  what: 'Prints a line of text.'
+  how: 'Whatever you write after echo is printed. Use > to save it into a file (replaces the file) or >> to add it to the end of a file.'
+  example: 'echo "hello" > note.txt'
+
+printf:
+  what: 'Prints text with exact formatting.'
+  how: 'Like echo, but you control every character. \n means a new line and %s is replaced by the next word you give it.'
+  example: 'printf ''one\ntwo\n'''
+
+touch:
+  what: 'Creates an empty file (or updates the time of an existing one).'
+  how: 'If the file does not exist, touch makes it with nothing inside. If it exists, only its "last changed" time is updated.'
+  example: 'touch notes.txt'
+
+mkdir:
+  what: 'Creates a new folder.'
+  how: 'mkdir name makes one folder. Add -p to create a whole path at once, like a/b/c, without errors if parts already exist.'
+  example: 'mkdir -p work/demo'
+
+cp:
+  what: 'Copies a file or folder.'
+  how: 'cp source destination makes a copy and keeps the original. Add -r to copy a folder with everything inside it.'
+  example: 'cp notes.txt notes-backup.txt'
+
+mv:
+  what: 'Moves or renames a file or folder.'
+  how: 'mv old new renames it. If the destination is a folder, the file moves into that folder. The original name is gone afterwards.'
+  example: 'mv draft.txt final.txt'
+
+rm:
+  what: 'Deletes files (there is no recycle bin).'
+  how: 'rm file deletes a file. rm -r folder deletes a folder and everything inside it. Be careful, deleted files cannot be brought back.'
+  example: 'rm old.txt'
+
+find:
+  what: 'Searches for files and folders by name, type, size or age.'
+  how: 'find PLACE TESTS walks through every folder under PLACE. -name ''*.txt'' matches names, -type f only files, -type d only folders.'
+  example: 'find ~ -name ''*.txt'''
+
+grep:
+  what: 'Finds lines that contain a word or pattern.'
+  how: 'grep word file prints only the matching lines. -i ignores upper/lower case, -r searches inside folders, -n shows line numbers, -v shows lines that do NOT match, -c counts them.'
+  example: 'grep -n root /etc/passwd'
+
+wc:
+  what: 'Counts lines, words and characters.'
+  how: 'wc -l counts lines, wc -w words, wc -c bytes. It is often used at the end of a pipe to count results.'
+  example: 'ls /etc | wc -l'
+
+head:
+  what: 'Shows the first lines of a file.'
+  how: 'By default the first 10 lines. -n 3 shows the first 3.'
+  example: 'head -n 3 /etc/passwd'
+
+tail:
+  what: 'Shows the last lines of a file.'
+  how: 'By default the last 10 lines. -n 5 shows the last 5, and -f keeps watching the file and prints new lines as they are added (great for logs).'
+  example: 'tail -n 5 /etc/passwd'
+
+sort:
+  what: 'Puts lines in order.'
+  how: 'Alphabetical by default. -n sorts numbers properly, -r reverses the order, -u removes duplicates.'
+  example: 'printf ''b\na\nc\n'' | sort'
+
+uniq:
+  what: 'Removes repeated lines that are next to each other.'
+  how: 'It only compares neighbouring lines, so it is almost always used after sort. -c also counts how many times each line appeared.'
+  example: 'printf ''a\na\nb\n'' | uniq -c'
+
+chmod:
+  what: 'Changes who may read, write or run a file.'
+  how: 'Permissions come in three groups (owner, group, everyone else) with r = read, w = write, x = execute. chmod +x file lets you run a script; numbers work too, like 644 (rw-r--r--) or 755 (rwxr-xr-x).'
+  example: 'chmod +x myscript.sh'
+
+chown:
+  what: 'Changes the owner of a file.'
+  how: 'chown user:group file. Usually only the administrator (root) may give files to someone else.'
+  example: 'ls -l file.txt'
+
+nano:
+  what: 'A simple text editor inside the terminal.'
+  how: 'Open a file with nano file, type to edit, Ctrl+O then Enter to save, Ctrl+X to exit. The shortcuts are listed at the bottom of the screen.'
+  example: 'nano notes.txt'
+
+bash:
+  what: 'The shell: the program that reads your commands and runs them.'
+  how: 'bash script.sh runs a script file line by line. The first line of a script, #!/bin/bash, tells Linux to use bash for it.'
+  example: 'bash --version'
+
+env:
+  what: 'Shows the environment variables of your shell.'
+  how: 'Environment variables are named settings (like HOME or PATH) that every program you start can read. env lists them all; echo $HOME prints one.'
+  example: 'env | grep HOME'
+
+set:
+  what: 'Shows or changes shell settings.'
+  how: 'In scripts, set -e stops the script at the first failing command and set -u treats unknown variables as errors, so mistakes are not silently ignored.'
+  example: 'set -e'
+
+test:
+  what: 'Checks a condition and answers with success or failure.'
+  how: 'test -f file is true if the file exists, -d for a folder, -x if it can be run. [ ... ] is the same command written with brackets, used in if.'
+  example: 'test -f /etc/passwd && echo exists'
+
+if:
+  what: 'Runs commands only when a condition is true.'
+  how: 'if CONDITION; then COMMANDS; else OTHER; fi. The condition is any command: exit code 0 means true, anything else means false.'
+  example: 'if [ -d /tmp ]; then echo yes; fi'
+
+for:
+  what: 'Repeats commands for each item in a list.'
+  how: 'for x in a b c; do echo $x; done runs the body once per item, with $x set to the current item.'
+  example: 'for n in 1 2 3; do echo $n; done'
+
+true:
+  what: 'A command that does nothing and always succeeds.'
+  how: 'It exits with code 0 (success). Useful in scripts and loops, like while true; do ...; done.'
+  example: 'true && echo ok'
+
+yes:
+  what: 'Prints the same line again and again, forever.'
+  how: 'It keeps printing until you stop it with Ctrl+C. Labs use it as a simple busy process that uses CPU.'
+  example: 'yes | head -n 3'
+
+ps:
+  what: 'Lists running processes (programs).'
+  how: 'Each process has a number called a PID. ps shows yours; ps aux shows every process with its owner, CPU and memory use.'
+  example: 'ps aux | head'
+
+kill:
+  what: 'Asks a process to stop.'
+  how: 'kill PID sends a polite stop signal. kill -9 PID forces it if it does not listen. kill %1 stops background job number 1.'
+  example: 'kill %1'
+
+jobs:
+  what: 'Lists the commands running in the background of this shell.'
+  how: 'Add & at the end of a command to run it in the background. jobs shows them with numbers like [1]; fg brings one back to the front.'
+  example: 'sleep 60 & jobs'
+
+ulimit:
+  what: 'Shows or sets limits for your shell, like how many processes or how big files may be.'
+  how: 'ulimit -a lists all limits. Limits protect the machine from runaway programs.'
+  example: 'ulimit -a'
+
+hostname:
+  what: 'Prints the name of this machine.'
+  how: 'Every computer (and every container) has a host name that other machines and logs use to identify it.'
+  example: 'hostname'
+
+uname:
+  what: 'Prints information about the operating system.'
+  how: 'uname -s gives the kernel name (Linux), -r its version, -a everything at once.'
+  example: 'uname -sr'
+
+getent:
+  what: 'Looks up entries in system databases such as users or host names.'
+  how: 'getent passwd learner shows a user''s record, getent hosts example.com shows the address a name resolves to.'
+  example: 'getent hosts localhost'
+
+tar:
+  what: 'Packs many files into one archive file, or unpacks one.'
+  how: 'tar -czf out.tar.gz folder creates a compressed archive, tar -xzf out.tar.gz extracts it, tar -tf lists what is inside. c = create, x = extract, f = file, z = gzip.'
+  example: 'tar -tf archive.tar'
+
+curl:
+  what: 'Sends a request to a URL and prints the answer.'
+  how: 'curl URL downloads a web page or API response. -I shows only the headers, -o saves to a file, -s hides the progress bar, -v shows every step of the conversation.'
+  example: 'curl -I https://example.com'
+
+ping:
+  what: 'Checks whether another machine answers on the network.'
+  how: 'It sends small packets and shows how long each reply takes. -c 3 stops after 3 packets.'
+  example: 'ping -c 3 127.0.0.1'
+
+dig:
+  what: 'Asks DNS which IP address a name points to.'
+  how: 'dig example.com shows the full answer; dig +short example.com prints only the address. DNS is the internet''s phone book.'
+  example: 'dig +short example.com'
+
+ss:
+  what: 'Shows network connections and which programs are listening on which ports.'
+  how: 'ss -tln lists TCP ports that are listening (t = TCP, l = listening, n = numbers instead of names). Add -p to see the program.'
+  example: 'ss -tln'
+
+nc:
+  what: 'netcat - opens raw network connections, to listen on a port or connect to one.'
+  how: 'nc -l 127.0.0.1 9000 waits for a connection on port 9000; nc 127.0.0.1 9000 connects to it. Whatever you type travels across.'
+  example: 'nc -zv 127.0.0.1 22'
+
+openssl:
+  what: 'A toolkit for certificates and encryption.'
+  how: 'openssl x509 -in cert.pem -noout -text shows what is inside a certificate; openssl s_client -connect host:443 shows the TLS handshake with a server.'
+  example: 'openssl version'
+
+jq:
+  what: 'Reads and filters JSON data.'
+  how: 'jq ''.name'' file.json prints one field, jq ''.items | length'' counts a list. A single dot . prints the whole JSON nicely formatted.'
+  example: 'echo ''{"a":1}'' | jq .a'
+
+node:
+  what: 'Runs JavaScript programs outside the browser.'
+  how: 'node file.js runs a script, node -v prints the version, node -e ''code'' runs a small piece of code.'
+  example: 'node -v'
+
+npm ci:
+  what: 'Installs a Node.js project''s packages exactly as listed in package-lock.json.'
+  how: 'It deletes node_modules and installs the exact locked versions, so every machine gets the same result. Best for CI and servers.'
+  example: 'npm ci'
+
+npm test:
+  what: 'Runs the project''s tests.'
+  how: 'It runs whatever command package.json defines under "scripts" > "test".'
+  example: 'npm test'
+
+docker:
+  what: 'Builds and runs containers.'
+  how: 'A container is a normal Linux process with its own view of files, processes and network. docker build makes an image, docker run starts a container from it.'
+  example: 'docker --version'
+
+docker build:
+  what: 'Builds an image from a Dockerfile.'
+  how: 'docker build -t name:tag . reads the Dockerfile in the current folder (the dot) and runs its instructions one by one, each adding a layer.'
+  example: 'docker build -t myapp:1.0 .'
+
+docker run:
+  what: 'Starts a container from an image.'
+  how: 'docker run IMAGE starts it. -d runs it in the background, -p 8080:80 connects a port on your machine to one in the container, --rm deletes it when it stops.'
+  example: 'docker run --rm alpine echo hi'
+
+git:
+  what: 'Records the history of a project''s files.'
+  how: 'Every saved snapshot is a commit. git status, git add and git commit are the everyday loop; git log shows the history.'
+  example: 'git --version'
+
+git init:
+  what: 'Starts a new git repository in the current folder.'
+  how: 'It creates a hidden .git folder where git keeps the whole history. Nothing is recorded until you add and commit files.'
+  example: 'git init demo'
+
+git status:
+  what: 'Shows what changed since the last commit.'
+  how: 'It lists new files (untracked), changed files, and files staged for the next commit, and which branch you are on.'
+  example: 'git status'
+
+git add:
+  what: 'Chooses changes to include in the next commit ("staging").'
+  how: 'git add file stages one file, git add . stages everything changed in this folder. Staged changes are saved by the next git commit.'
+  example: 'git add readme.md'
+
+git commit:
+  what: 'Saves the staged changes as a snapshot in the history.'
+  how: 'git commit -m "message" creates the commit with a short description. Each commit gets an ID (a hash) you can come back to later.'
+  example: 'git commit -m "Add readme"'
+
+git log:
+  what: 'Shows the list of commits.'
+  how: 'Newest first. --oneline shows one short line per commit; --graph draws branches.'
+  example: 'git log --oneline'
+
+git branch:
+  what: 'Lists, creates or deletes branches.'
+  how: 'A branch is a separate line of work. git branch shows them (* marks the current one), git branch name creates one.'
+  example: 'git branch'
+
+git switch:
+  what: 'Moves you to another branch.'
+  how: 'git switch name changes branch; git switch -c name creates a new branch and switches to it in one step.'
+  example: 'git switch -c my-branch'
+
+git restore:
+  what: 'Throws away changes in a file and brings back the committed version.'
+  how: 'git restore file undoes edits you have not committed. git restore --staged file un-stages a file but keeps your edits.'
+  example: 'git restore readme.md'
+
+git revert:
+  what: 'Undoes a commit by adding a new commit that does the opposite.'
+  how: 'The old commit stays in the history, which makes it safe for shared branches. git revert HEAD undoes the latest commit.'
+  example: 'git revert HEAD'

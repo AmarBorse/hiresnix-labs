@@ -14,10 +14,10 @@
 .hero-art { animation: rise 1.2s .15s cubic-bezier(.2, .7, .2, 1) both; }
 
 /* the terminal demo: a hairline window, three quiet dots, a short graded session */
-.term-demo { border: 1px solid var(--rule2); border-radius: 14px; background: rgba(7, 11, 22, .8); overflow: hidden; max-width: 520px; margin-left: auto; }
+.term-demo { border: 1px solid var(--rule2); border-radius: 14px; background: rgba(4, 10, 26, .8); overflow: hidden; max-width: 520px; margin-left: auto; }
 .td-bar { display: flex; align-items: center; gap: 7px; padding: 11px 14px; border-bottom: 1px solid var(--rule); font: 12px var(--mono); color: var(--faint); }
 .td-bar i { width: 9px; height: 9px; border-radius: 50%; border: 1px solid var(--rule2); } .td-bar span { margin-left: 8px; }
-.term-demo pre { margin: 0; border: 0; border-radius: 0; background: none; padding: 20px 20px 22px; font: 13px/1.95 var(--mono); color: #ece6d8; }
+.term-demo pre { margin: 0; border: 0; border-radius: 0; background: none; padding: 20px 20px 22px; font: 13px/1.95 var(--mono); color: #e3eaf8; }
 .term-demo .p { color: var(--brand2); } .term-demo .d { color: var(--faint); } .term-demo .ok { color: var(--ok); }
 
 /* ---- sections ---- */
@@ -27,8 +27,8 @@
 
 /* the labs: a grid of track cards, hairline borders, a thin progress line along the bottom edge */
 .tgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 18px; }
-.tcard { position: relative; display: flex; flex-direction: column; padding: 26px 26px 22px; border: 1px solid var(--rule); border-radius: 16px; background: rgba(255, 214, 150, .018); text-decoration: none; overflow: hidden; transition: border-color .25s, background .25s, transform .25s; }
-.tcard:hover { border-color: color-mix(in srgb, var(--brand) 55%, transparent); background: rgba(245, 165, 36, .06); transform: translateY(-2px); }
+.tcard { position: relative; display: flex; flex-direction: column; padding: 26px 26px 22px; border: 1px solid var(--rule); border-radius: 16px; background: rgba(150, 190, 255, .018); text-decoration: none; overflow: hidden; transition: border-color .25s, background .25s, transform .25s; }
+.tcard:hover { border-color: color-mix(in srgb, var(--brand) 55%, transparent); background: rgba(26, 115, 232, .06); transform: translateY(-2px); }
 .tcard::after { content: ''; position: absolute; left: 0; bottom: 0; height: 2px; width: calc(var(--p, 0) * 100%); background: var(--grad); }
 .tnum { font: 500 11.5px var(--mono); letter-spacing: .14em; color: var(--brand); }
 .tcard h3 { font: 600 1.3rem/1.2 var(--display); letter-spacing: -.03em; margin: 14px 0 8px; }
@@ -46,13 +46,13 @@
 
 /* run locally */
 .run-grid { display: grid; grid-template-columns: .8fr 1.2fr; gap: 64px; align-items: center; } .run-grid > * { min-width: 0; }
-.runbox { max-width: 100%; border: 1px solid var(--rule); border-radius: 16px; padding: 22px; background: rgba(255, 214, 150, .015); }
+.runbox { max-width: 100%; border: 1px solid var(--rule); border-radius: 16px; padding: 22px; background: rgba(150, 190, 255, .015); }
 .tabs-os { display: flex; gap: 22px; border-bottom: 1px solid var(--rule); margin-bottom: 16px; }
 .tabs-os button { border: 0; background: none; color: var(--muted); font: 500 13px var(--sans); padding: 0 0 10px; cursor: pointer; border-bottom: 1px solid transparent; margin-bottom: -1px; transition: color .2s; }
 .tabs-os button:hover { color: var(--text); } .tabs-os button[aria-selected='true'] { color: var(--text); border-bottom-color: var(--text); }
 .run-note { color: var(--muted); font-size: .9rem; margin: 0 0 14px; } .home .run-note a, .home .run-after a { color: var(--text); }
 .codeblock { position: relative; background: var(--panel); border: 1px solid var(--rule); border-radius: 12px; }
-.codeblock pre { margin: 0; padding: 16px 84px 16px 16px; overflow-x: auto; background: none; border: 0; font: 13px/1.9 var(--mono); color: #ece6d8; }
+.codeblock pre { margin: 0; padding: 16px 84px 16px 16px; overflow-x: auto; background: none; border: 0; font: 13px/1.9 var(--mono); color: #e3eaf8; }
 .codeblock code { background: none; padding: 0; color: inherit; } .codeblock .ln { display: block; } .codeblock b { color: var(--faint); margin-right: 8px; user-select: none; font-weight: 400; }
 .copy { position: absolute; top: 10px; right: 10px; padding: 5px 12px; border-radius: 999px; border: 1px solid var(--rule2); background: transparent; color: var(--muted); font: 500 12px var(--sans); cursor: pointer; transition: color .2s, border-color .2s; }
 .copy:hover { color: var(--text); border-color: var(--text); } .copy.done { color: var(--ok); border-color: var(--ok); }

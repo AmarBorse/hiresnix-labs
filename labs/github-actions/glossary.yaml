@@ -1,0 +1,86 @@
+# GitHub Actions track: the words in a workflow file (.github/workflows/*.yml). They override shell meanings here.
+on:
+  what: 'Says which events start the workflow.'
+  how: 'For example on push (new commits), pull_request, or workflow_dispatch (a manual button). You can limit it, like push only to the main branch.'
+  example: 'on: { push: { branches: [main] } }'
+push:
+  what: 'The event for new commits pushed to the repository.'
+  how: 'Under on, add branches to limit it, so only pushes to main start the workflow.'
+  example: 'push: { branches: [main] }'
+pull_request:
+  what: 'The event for pull requests being opened or updated.'
+  how: 'Runs the workflow on the proposed changes before they are merged, which is where tests usually run.'
+  example: 'on: [pull_request]'
+workflow_dispatch:
+  what: 'Adds a "Run workflow" button so a person can start it by hand.'
+  how: 'Put it under on. Useful for deploys or tasks you do not want on every push.'
+  example: 'on: { workflow_dispatch: {} }'
+runs-on:
+  what: 'Chooses the machine (runner) a job runs on.'
+  how: 'ubuntu-latest is a fresh Linux virtual machine from GitHub for each job; it is thrown away afterwards.'
+  example: 'runs-on: ubuntu-latest'
+ubuntu-latest:
+  what: 'GitHub''s newest standard Ubuntu runner.'
+  how: 'Every job gets a clean copy, so nothing is left over from a previous run.'
+  example: 'runs-on: ubuntu-latest'
+steps:
+  what: 'The ordered list of things a job does.'
+  how: 'Each step either uses a ready-made action (uses) or runs shell commands (run). They run one after another on the same machine.'
+  example: 'steps: [ { uses: actions/checkout@v4 } ]'
+uses:
+  what: 'Runs a ready-made action written by someone else.'
+  how: 'owner/name@version, for example actions/checkout@v4 to download your code. Pin a version so it cannot change under you.'
+  example: 'uses: actions/checkout@v4'
+run:
+  what: 'Runs shell commands in a step.'
+  how: 'The text is run by bash on the runner, like typing it in a terminal. Use | for several lines.'
+  example: 'run: npm test'
+needs:
+  what: 'Makes a job wait for other jobs to succeed first.'
+  how: 'needs [build, test] means this job starts only after both pass. Without needs, jobs run at the same time.'
+  example: 'needs: [build, test]'
+permissions:
+  what: 'Limits what the workflow''s GitHub token is allowed to do.'
+  how: 'Give only what is needed, like contents read. id-token write is needed to log in to AWS with OIDC.'
+  example: 'permissions: { contents: read }'
+env:
+  what: 'Sets environment variables for a workflow, job or step.'
+  how: 'Values like secrets are passed in here, ${{ secrets.NAME }}, so they never appear in the command text or logs.'
+  example: 'env: { API_TOKEN: ${{ secrets.API_TOKEN }} }'
+matrix:
+  what: 'Runs the same job several times with different values.'
+  how: 'A matrix of python [3.11, 3.12] and os [ubuntu, windows] runs 4 jobs, one per combination.'
+  example: 'strategy: { matrix: { python: ["3.11", "3.12"] } }'
+fail-fast:
+  what: 'Whether one failing matrix job cancels the others.'
+  how: 'The default true stops the rest at the first failure; false lets every combination finish so you see all results.'
+  example: 'strategy: { fail-fast: false }'
+include:
+  what: 'Adds extra combinations to a matrix.'
+  how: 'Each entry under include adds one job (or extra values) on top of the normal combinations.'
+  example: 'include: [ { python: "3.13", os: ubuntu-latest } ]'
+exclude:
+  what: 'Removes combinations from a matrix.'
+  how: 'Each entry under exclude skips the matching job, for example one Python version on one operating system.'
+  example: 'exclude: [ { python: "3.11", os: windows-latest } ]'
+role-to-assume:
+  what: 'The AWS IAM role the workflow logs in as.'
+  how: 'Used by aws-actions/configure-aws-credentials. With OIDC, GitHub proves who it is and AWS gives short-lived keys, so no passwords are stored.'
+  example: 'role-to-assume: arn:aws:iam::123456789012:role/deploy'
+aws-region:
+  what: 'Which AWS region the workflow talks to.'
+  how: 'For example us-east-1 or ap-south-1 (Mumbai).'
+  example: 'aws-region: ap-south-1'
+aud:
+  what: 'The "audience" in GitHub''s login token - who the token is meant for.'
+  how: 'For AWS it must be sts.amazonaws.com. The AWS trust policy checks it.'
+  example: 'token.actions.githubusercontent.com:aud = sts.amazonaws.com'
+sub:
+  what: 'The "subject" in GitHub''s login token - which repository and branch is asking.'
+  how: 'The AWS trust policy checks it, so only your repo''s main branch can use the role.'
+  example: 'repo:owner/repo:ref:refs/heads/main'
+
+true:
+  what: 'A YAML yes value (its opposite is false).'
+  how: 'YAML turns words like true and false into yes/no values. Older YAML readers even read a bare on: key as true, which is why tools sometimes see the trigger section under true.'
+  example: 'fail-fast: true'

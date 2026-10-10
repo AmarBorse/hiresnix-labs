@@ -37,7 +37,7 @@ test('every page has the shared chrome in both profiles: header, one mark sprite
       const css = await get(app, '/app.css');
       assert.equal(css.headers['content-type'], 'text/css');
       assert.equal(css.body.includes('googleapis'), profile === 'hosted');
-      assert.equal((await get(app, '/logo/hiresnix-logo.svg')).headers['content-type'], 'image/svg+xml');
+      for (const f of ['mark', 'wordmark', 'icon']) assert.equal((await get(app, `/logo/hiresnix-${f}.png`)).headers['content-type'], 'image/png');
       for (const f of ['/xterm/xterm.js', '/xterm/xterm.css', '/xterm/addon-fit.js', '/lab.js', '/progress.js', '/home.css', '/home.js']) assert.equal((await get(app, f)).status, 200, f);
     } finally { app.stop(); }
   }

@@ -1,0 +1,49 @@
+# Docker track additions to labs/glossary.yaml: Dockerfile instructions and image words.
+FROM:
+  what: 'The first line of a Dockerfile - which base image to start from.'
+  how: 'FROM python:3.12-slim starts from the official Python 3.12 image in its small "slim" variant. Use an exact version tag so every build gets the same base.'
+  example: 'FROM python:3.12-slim'
+WORKDIR:
+  what: 'Sets the folder that the following instructions work in.'
+  how: 'Every later COPY, RUN and CMD runs from this folder, and Docker creates it if it does not exist. It is like cd, but for the Dockerfile.'
+  example: 'WORKDIR /app'
+COPY:
+  what: 'Copies files from your project into the image.'
+  how: 'COPY source destination. Copy the dependency list first and the rest of the code later, so Docker can reuse the cached install layer when only code changes.'
+  example: 'COPY requirements.txt ./'
+RUN:
+  what: 'Runs a command while the image is being built.'
+  how: 'Each RUN adds a layer with the files it changed, for example installing packages. It runs at build time, not when the container starts.'
+  example: 'RUN pip install -r requirements.txt'
+CMD:
+  what: 'The command a container runs when it starts.'
+  how: 'Write it as a JSON list, like CMD ["python", "app.py"], so the program runs directly and receives stop signals properly. There is only one CMD.'
+  example: 'CMD ["python", "app.py"]'
+USER:
+  what: 'Which user the following instructions and the container run as.'
+  how: 'Containers run as root unless you say otherwise. USER appuser switches to a normal user, which limits the damage if the app is ever broken into.'
+  example: 'USER appuser'
+EXPOSE:
+  what: 'Documents which port the app inside listens on.'
+  how: 'It is a note for people and tools; it does not open the port by itself. You still publish it with docker run -p.'
+  example: 'EXPOSE 3000'
+ENV:
+  what: 'Sets an environment variable inside the image.'
+  how: 'Programs in the container can read it, for example NODE_ENV=production. Never put secrets here, they stay readable in the image.'
+  example: 'ENV NODE_ENV=production'
+.dockerignore:
+  what: 'A list of files Docker must leave out of the build.'
+  how: 'Works like .gitignore. Leaving out node_modules, .git and .env makes builds faster and keeps secrets out of the image.'
+  example: 'node_modules'
+latest:
+  what: 'The default image tag when you do not give one.'
+  how: 'latest simply means "whatever was pushed last", so it can change under you. Pin an exact version like python:3.12.7-slim instead.'
+  example: 'docker pull alpine:3.20'
+layers:
+  what: 'The read-only slices an image is made of.'
+  how: 'Each Dockerfile instruction that changes files adds a layer on top of the previous ones. Deleting a file in a later layer hides it but does not remove it from the earlier layer.'
+  example: 'docker history myapp:1.0'
+compose:
+  what: 'Docker Compose runs several containers together from one file.'
+  how: 'compose.yaml lists the services (app, database, ...), their ports, volumes and networks. docker compose up starts all of them.'
+  example: 'docker compose up -d'

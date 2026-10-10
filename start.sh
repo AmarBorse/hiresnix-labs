@@ -161,7 +161,24 @@ ensure_tools() {
     local SUDO=""; [ "$(id -u)" -ne 0 ] && SUDO="sudo"
     say "Installing: ${pkgs[*]}"
     [ -n "$SUDO" ] && note "(sudo will ask for your Linux password once)"
-    $SUDO apt-get update -qq
+    # WSL's clock often falls behind after Windows sleeps; apt then refuses package lists as "not valid yet".
+    # Re-sync the clock (from the host, or failing that from a web server's Date header) and try once more.
+    local aptlog="${TMPDIR:-/tmp}/hiresnix-apt.log"
+    if ! $SUDO apt-get update -qq 2>"$aptlog" || grep -q "not valid yet" "$aptlog"; then
+      if grep -q "not valid yet" "$aptlog"; then
+        note "Your Linux clock is behind (common in WSL after sleep). Fixing the clock, then retrying..."
+        $SUDO hwclock -s >/dev/null 2>&1 || true
+        if grep -q "not valid yet" < <($SUDO apt-get update -qq 2>&1); then
+          local now
+          now=$(curl -fsI --max-time 10 https://ubuntu.com 2>/dev/null | tr -d '\r' | sed -n 's/^[Dd]ate: //p')
+          [ -n "$now" ] && $SUDO date -s "$now" >/dev/null
+        fi
+        $SUDO apt-get update -qq || true
+      else
+        cat "$aptlog" >&2
+        note "apt-get update reported problems; trying the install anyway..."
+      fi
+    fi
     DEBIAN_FRONTEND=noninteractive $SUDO apt-get install -y -qq --no-install-recommends "${pkgs[@]}" ca-certificates
   else
     fail "Install these packages with your package manager, then run this again: ${pkgs[*]}"

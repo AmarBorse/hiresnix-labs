@@ -1,6 +1,6 @@
 // Page bodies for the app. The shared chrome (header, frame) comes from ui.page().
 const { esc, SITE_URL, mark } = require('./ui');
-const { ASCII_BANNER } = require('./banner');
+const { welcome } = require('./banner');
 
 const mins = (ms) => Math.round(ms / 60000);
 // Optional: where the source lives (shown as a "Source" link and in the clone step). Unset = hidden.
@@ -140,11 +140,12 @@ const STAT = (id, label) => `<div class="stat-cell"><div class="stat-label">${la
 function labBody(lab, trackTitle, cfg, next) {
   const data = {
     track: lab.track, lab: lab.id, title: lab.title, trackUrl: '/t/' + lab.track,
-    local: cfg.isLocal, gated: !cfg.isLocal && (cfg.terminal || !!cfg.backendUrl || cfg.sandbox), backend: cfg.backendUrl, sandbox: !!cfg.sandbox, banner: ASCII_BANNER,
+    local: cfg.isLocal, gated: !cfg.isLocal && (cfg.terminal || !!cfg.backendUrl || cfg.sandbox), backend: cfg.backendUrl, sandbox: !!cfg.sandbox, banner: welcome(lab.title),
     links: lab.links, resources: lab.resources, next,
     steps: lab.steps.map((s) => ({
       id: s.id, type: s.type, title: s.title, hint: s.hint, success: s.success,
       bodyHtml: (cfg.isLocal && s.localBodyHtml) || s.bodyHtml,
+      commands: s.commands || [],
     })),
   };
   // JSON in a script tag: neutralise "<" so content can never close the tag.
@@ -152,6 +153,7 @@ function labBody(lab, trackTitle, cfg, next) {
   const links = lab.links.map((l) => `<a href="${esc(l.url)}" target="_blank" rel="noopener noreferrer">${esc(l.title)}</a>`).join('');
   return {
     body: `
+  <div class="lab-frame">
   <div class="lab-shell">
     <div class="tasks-pane">
       ${crumb([['Labs', '/'], [trackTitle, `/t/${lab.track}`]])}
@@ -161,6 +163,10 @@ function labBody(lab, trackTitle, cfg, next) {
       <div class="step-card">
         <div class="step-title" id="step-title"></div>
         <div class="step-body" id="step-body"></div>
+        <section class="cmd-guide" id="cmd-guide" aria-labelledby="cmd-guide-title" hidden>
+          <h2 class="cmd-guide-title" id="cmd-guide-title">Commands in this step</h2>
+          <div class="cmd-list" id="cmd-list"></div>
+        </section>
         <div class="step-hint" id="step-hint" role="status"></div>
         <div class="step-footer">
           <button class="btn link" id="back-btn">&larr; Back</button>
@@ -180,9 +186,10 @@ function labBody(lab, trackTitle, cfg, next) {
         <div class="invite-row"><input id="invite-code" type="password" spellcheck="false" autocapitalize="off" required /><button class="btn primary" type="submit">Start</button></div>
       </form>
       <div id="term"></div>
+      <div class="stats-box" id="stats-box">${STAT('cpu', 'CPU')}${STAT('mem', 'Memory')}${STAT('uptime', 'Uptime')}<div class="stats-note-cell">${esc(cfg.ownerNote)}</div></div>
     </div>
   </div>
-  <div class="stats-box" id="stats-box">${STAT('cpu', 'CPU')}${STAT('mem', 'Memory')}${STAT('uptime', 'Uptime')}<div class="stats-note-cell">${esc(cfg.ownerNote)}</div></div>`,
+  </div>`,
     scripts: `<link rel="stylesheet" href="/xterm/xterm.css" />
   <script id="lab-data" type="application/json">${json}</script>
   <script src="/xterm/xterm.js"></script><script src="/xterm/addon-fit.js"></script><script src="/progress.js"></script><script src="/lab.js"></script>`,

@@ -55,10 +55,13 @@ test/       unit/ integration/         deploy/smoke-test.py         docs/ author
   proves each check fails before and passes after its solution. See `docs/authoring.md`.
 - Brand/chrome (header, logo, optional `SITE_URL` link, tokens, the prompt-mark sprite) lives only in `src/ui.js` +
   `public/{tokens,components,lab}.css`. Don't copy it into another page.
-- **Design brief: an amber-phosphor terminal on deep ink blue.** Ink-blue ground with a soft fixed amber wash, hairlines
-  instead of fills, warm paper-coloured text, Sora for display and Inter for the interface, and one brand gradient (pale gold
-  to amber to coral) used only on the headline accent, the primary button and thin progress rules. No glows, offset shadows
+- **Design brief: the Hiresnix logo's blues.** Deep navy ground with a soft fixed blue wash, hairlines instead of fills,
+  Sora for display and Inter for the interface, and one brand gradient (the logo's cyan to royal blue to indigo) used only
+  on the headline accent, the primary button and thin progress rules. Logo files: `public/logo/hiresnix-{mark,wordmark,icon}.png`
+  (the wordmark is the dark-background version: white letters, blue X). No glows, offset shadows
   or filled chips. Motion budget: a short fade-in and small hover lifts; always honour `prefers-reduced-motion`.
+- **Command guide:** `labs/glossary.yaml` (+ `labs/<track>/glossary.yaml`) explains commands in simple English; a step shows
+  the entries for the commands its text puts in `backticks`. Examples must be generic, never a task's answer.
 - **The catalog is the site:** the home page, track pages and breadcrumbs are built from `labs/<track>/track.yaml` and the
   lab folders.
 

@@ -142,3 +142,20 @@ Run `npm run lab:check -- <track>/<lab>`: the static lint, then this proof (dire
 
 Every lab should feel like the same product: start with a lesson that frames the idea; give every task a hint (a nudge, not the answer);
 keep the title <= 48 characters, the summary <= 100, each step body <= 700, and the lab between 5 and 20 minutes (aim for 15 or less; 3 to 7 graded tasks, lessons not counted).
+
+## The command guide
+
+Under every step the learner sees **Commands in this step**: a simple-English explanation of each command the step's text
+mentions in `backticks` (also inside fenced code, and every part of a pipeline like `ls | wc -l`). The explanations come from
+`labs/glossary.yaml`; a track can add its own words in `labs/<track>/glossary.yaml` (for example Dockerfile instructions).
+
+If your lab uses a command that has no entry yet, add one:
+
+```yaml
+du:
+  what: 'Shows how much disk space files and folders use.'
+  how: 'du -sh folder prints one total in a readable size; without -s it lists every subfolder.'
+  example: 'du -sh /var/log'
+```
+
+Keep `what` to one sentence, `how` to one or two, and make the example generic: never the answer to one of your tasks.

@@ -2,10 +2,11 @@
    and small text. Anything colourful on a page should be earning its place. */
 
 /* ---- header: translucent over the gradient, with the turtle mark ---- */
-.topbar { display: flex; align-items: center; gap: 28px; height: var(--topbar-h); padding: 0 28px; background: rgba(11, 18, 32, .72); backdrop-filter: blur(10px); border-bottom: 1px solid var(--rule); position: sticky; top: 0; z-index: 5; }
+.topbar { display: flex; align-items: center; gap: 28px; height: var(--topbar-h); padding: 0 28px; background: rgba(6, 16, 36, .82); backdrop-filter: blur(10px); border-bottom: 1px solid var(--rule); position: sticky; top: 0; z-index: 5; }
 .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); }
-.logo-mark { height: 34px; width: auto; object-fit: contain; flex-shrink: 0; }
-.logo-word { font: 600 17px var(--display); letter-spacing: -.03em; } .logo-word .accent { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.logo-mark { height: 36px; width: auto; object-fit: contain; flex-shrink: 0; }
+.logo-wordmark { height: 18px; width: auto; flex-shrink: 0; margin-left: 2px; }
+.logo-word { font: 600 17px var(--display); letter-spacing: -.02em; margin-left: 4px; } .logo-word.accent, .logo-word .accent { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 14px; }
 .chip-env { font: 11px var(--mono); color: var(--faint); letter-spacing: .06em; text-transform: uppercase; }
 .btn-site { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border: 1px solid var(--rule2); border-radius: 999px; color: var(--text); text-decoration: none; font-size: 13px; transition: border-color .2s, color .2s; }
@@ -22,13 +23,13 @@
 .warn { border: 1px solid var(--bad); border-radius: 10px; padding: 10px 14px; margin: 14px 0; font-size: 13px; color: #fecaca; }
 
 /* ---- buttons ---- */
-.btn-primary { display: inline-flex; align-items: center; gap: 10px; padding: 12px 22px; border-radius: 999px; background: var(--grad); color: #1a1004; text-decoration: none; font: 600 14px var(--sans); transition: filter .2s, transform .2s; }
+.btn-primary { display: inline-flex; align-items: center; gap: 10px; padding: 12px 22px; border-radius: 999px; background: var(--grad); color: #ffffff; text-decoration: none; font: 600 14px var(--sans); transition: filter .2s, transform .2s; }
 .btn-primary:hover { filter: brightness(1.1); transform: translateY(-1px); } .btn-primary span { transition: transform .2s; } .btn-primary:hover span { transform: translateX(3px); }
 .btn-quiet { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); text-decoration: none; font-size: 14px; padding: 12px 4px; transition: color .2s; }
 .btn-quiet:hover { color: var(--text); }
 .btn { font: inherit; border-radius: 999px; border: 1px solid var(--rule2); background: transparent; color: var(--text); padding: 8px 16px; cursor: pointer; transition: border-color .2s, background .2s; }
 .btn:hover { border-color: var(--text); }
-.btn.primary { background: var(--grad); color: #1a1004; border-color: transparent; font-weight: 600; } .btn.primary:hover { filter: brightness(1.1); } .btn.primary:disabled { opacity: .55; cursor: wait; }
+.btn.primary { background: var(--grad); color: #ffffff; border-color: transparent; font-weight: 600; } .btn.primary:hover { filter: brightness(1.1); } .btn.primary:disabled { opacity: .55; cursor: wait; }
 .btn.link { border: none; background: none; color: var(--muted); padding: 8px 6px; } .btn.link:hover { color: var(--text); }
 .btn.danger { color: var(--bad); border-color: rgba(248, 113, 113, .4); } .btn.danger:hover { border-color: var(--bad); }
 
@@ -74,7 +75,7 @@ details > summary::before { content: '+'; display: inline-block; width: 1.1em; c
 .card:hover { border-color: var(--rule2); } .card h2 { font-size: 1.15rem; margin: 0 0 6px; } .card p { color: var(--muted); margin: 0 0 12px; }
 .rows { display: flex; flex-direction: column; margin-top: 22px; border-top: 1px solid var(--rule); }
 .row { display: flex; align-items: center; gap: 16px; padding: 16px 4px; border-bottom: 1px solid var(--rule); text-decoration: none; color: var(--text); transition: background .2s; }
-.row:hover { background: rgba(255, 214, 150, .04); } .row small { color: var(--muted); } .grow { flex: 1; }
+.row:hover { background: rgba(150, 190, 255, .04); } .row small { color: var(--muted); } .grow { flex: 1; }
 .num { width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--rule2); display: grid; place-items: center; font: 12px var(--mono); color: var(--muted); }
 .badge { font: 11px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .tick { width: 20px; text-align: center; } .row.is-done .tick::after { content: '\2713'; color: var(--ok); } .row.is-done .num { border-color: var(--ok); color: var(--ok); }

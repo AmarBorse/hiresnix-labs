@@ -14,8 +14,8 @@
     convertEol: true, fontSize: 14, lineHeight: 1.35, cursorBlink: true,
     fontFamily: "'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace",
     theme: {
-      background: '#080d18', foreground: '#ece6d8', cursor: '#f5a524', cursorAccent: '#080d18',
-      selectionBackground: 'rgba(245,165,36,0.35)',
+      background: '#040b1c', foreground: '#e3eaf8', cursor: '#22b8f5', cursorAccent: '#040b1c',
+      selectionBackground: 'rgba(26,115,232,0.35)',
       black: '#1a1a1a', red: '#f26d78', green: '#a6e22e', yellow: '#e6db74', blue: '#66d9ef', magenta: '#ae81ff', cyan: '#a1efe4', white: '#d4d4d4',
       brightBlack: '#666666', brightRed: '#f26d78', brightGreen: '#a6e22e', brightYellow: '#e6db74', brightBlue: '#66d9ef', brightMagenta: '#ae81ff', brightCyan: '#a1efe4', brightWhite: '#f8f8f2',
     },
@@ -24,8 +24,11 @@
   term.loadAddon(fit);
   term.open($('term'));
   fit.fit();
-  term.write(DATA.banner + '\r\n\r\n  \x1b[38;2;245;185;66mHappy Learning\x1b[0m\r\n\r\n');
-  window.addEventListener('resize', function () { fit.fit(); sendSize(); });
+  term.write(DATA.banner + '\r\n');
+  // Refit whenever the terminal's box changes size (window resize, zoom, the layout settling), not only on window resize.
+  function refit() { try { fit.fit(); } catch (e) { /* not visible */ } sendSize(); }
+  window.addEventListener('resize', refit);
+  if (window.ResizeObserver) new ResizeObserver(refit).observe($('term'));
   term.onData(function (d) { if (ws && ws.readyState === 1) ws.send(d); });
   function sendSize() { if (ws && ws.readyState === 1) ws.send('\u0000resize:' + term.cols + ',' + term.rows); }
 
@@ -128,6 +131,7 @@
     $('step-counter').textContent = 'Step ' + (current + 1) + ' of ' + STEPS.length + ' · ' + (s.type === 'task' ? 'task' : 'lesson');
     $('step-title').textContent = s.title;
     $('step-body').innerHTML = s.bodyHtml;          // server-rendered from escaped markdown
+    renderCommands(s.commands || []);
     setHint('', false);
     var btn = $('action-btn');
     btn.disabled = false;
@@ -141,6 +145,31 @@
     $('back-btn').style.visibility = current === 0 ? 'hidden' : 'visible';
     $('skip-btn').style.visibility = last ? 'hidden' : 'visible';
     renderDots();
+  }
+  // "Commands in this step": every command the step mentions, in simple English. One line each; open one to see how it
+  // works and an example to try. Built with textContent only, so glossary text can never become markup.
+  function renderCommands(list) {
+    var box = $('cmd-guide'), holder = $('cmd-list');
+    holder.innerHTML = '';
+    box.hidden = !list.length;
+    list.forEach(function (c, i) {
+      var d = document.createElement('details');
+      d.className = 'cmd';
+      if (list.length === 1 && i === 0) d.open = true;
+      var sum = document.createElement('summary');
+      var name = document.createElement('code'); name.className = 'cmd-name'; name.textContent = c.name;
+      var what = document.createElement('span'); what.className = 'cmd-what'; what.textContent = c.what;
+      sum.appendChild(name); sum.appendChild(what);
+      var how = document.createElement('p'); how.className = 'cmd-how'; how.textContent = c.how;
+      d.appendChild(sum); d.appendChild(how);
+      if (c.example) {
+        var ex = document.createElement('p'); ex.className = 'cmd-example';
+        var lbl = document.createElement('span'); lbl.textContent = 'Example';
+        var code = document.createElement('code'); code.textContent = c.example;
+        ex.appendChild(lbl); ex.appendChild(code); d.appendChild(ex);
+      }
+      holder.appendChild(d);
+    });
   }
   function next() { if (current < STEPS.length - 1) { current++; render(); } }
   $('back-btn').onclick = function () { if (current > 0) { current--; render(); } };
@@ -183,6 +212,7 @@
     $('step-counter').textContent = 'Complete';
     $('step-title').style.display = 'none';
     $('step-body').innerHTML = html;
+    renderCommands([]);
     setHint('', false);
     $('action-btn').style.display = 'none';
     $('skip-btn').style.visibility = 'hidden';

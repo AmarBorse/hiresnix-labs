@@ -4,6 +4,19 @@ All notable changes to Hiresnix Labs are listed here. The format follows Keep a 
 
 ## [Unreleased]
 
+### Added
+- "Commands in this step": every lab step now explains, in simple English, each command its text mentions (what it does,
+  how it works, an example to try). Explanations live in `labs/glossary.yaml`, with track additions for Dockerfile
+  instructions (`labs/docker/glossary.yaml`) and workflow keywords (`labs/github-actions/glossary.yaml`).
+
+### Changed
+- The real Hiresnix logo: the rising-arrow symbol and the HIRESNIX wordmark in the header, the symbol as the favicon, and
+  the full logo in the README. The palette now follows the logo's blues instead of amber.
+- Lab page layout: exactly one screen tall, each pane scrolls on its own, the step buttons stay pinned at the bottom, and
+  the CPU/memory bar moved under the terminal. Fixes buttons hidden behind the stats bar on laptops with display scaling.
+- The terminal welcome is now a short coloured "HIRESNIX LABS" line with the lab title instead of large block letters,
+  which broke apart in some fonts and on narrow terminals. The terminal also refits whenever its box changes size.
+
 ### Fixed
 - Windows: `start.bat` failed with `execvpe(bash) failed` when the default WSL distribution was Docker Desktop's internal
   one, which has no bash. It now looks for a distribution with bash (the default, then Ubuntu, then any other) and, if there
@@ -13,6 +26,8 @@ All notable changes to Hiresnix Labs are listed here. The format follows Keep a 
 - Windows: with Docker Desktop's distro as the WSL default, `start.bat` could pick a wrong distro name and fail with
   `WSL_E_DISTRO_NOT_FOUND`. It now tries known Linux distros by name (Ubuntu first) with exact exit-code checks, then the
   default; `HIRESNIX_DISTRO` forces one, and the message for a missing distro lists what WSL has.
+- Linux/WSL: when the clock has fallen behind (common in WSL after Windows sleeps), `apt` rejected the package lists as
+  "not valid yet" and the first run stopped. `start.sh` now re-syncs the clock and retries.
 - CI: the launcher job runs `bash ./start.sh`, so it no longer depends on the file's executable bit.
 
 ## [0.1.0] - 2026-10-10
