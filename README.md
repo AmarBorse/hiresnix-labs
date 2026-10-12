@@ -13,6 +13,9 @@ Not a simulator and not a quiz. Each task runs a check script against the real s
 there, is the git history right, is the process running, is the port listening. Labs are plain YAML and shell scripts, so
 anyone on the team can write one.
 
+lab setup pdf in this drive
+https://drive.google.com/file/d/1woKvj-UzQjJpqlTTL2a7_gm8cYl6hLYi/view?usp=drive_link
+
 ## Run it on your machine
 
 | Your machine | What to do | Docker? |
